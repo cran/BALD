@@ -1,0 +1,17 @@
+PKG_CPPFLAGS=-I"@JAGS_INCLUDE@" -I"@JAGS_INCLUDE@/rng" -I"@JAGS_INCLUDE@/distribution" -DMATHLIB_STANDALONE
+
+PKG_LIBS=-L@JAGS_LIB@ $(LAPACK_LIBS) $(BLAS_LIBS) -ljrmath -ljags $(LIBS) $(FLIBS)
+
+OBJECTS.samplers=samplers/ExpandableArray.o samplers/Knots.o samplers/RJumpSpline.o  samplers/RJumpSplineFactory.o samplers/RealSlicerOV.o  samplers/SliceFactoryOV.o samplers/MNorm.o
+OBJECTS.distributions=distributions/DSpline.o distributions/DChisqrOV.o distributions/DTOV.o distributions/DNormOV.o distributions/DUnifOV.o distributions/RJScalarDist.o
+OBJECTS.root=RJump.o
+
+OBJECTS= $(OBJECTS.samplers) $(OBJECTS.distributions) $(OBJECTS.root)
+
+all: before $(SHLIB)
+
+clean:
+	rm -f $(OBJECTS)
+
+before: clean
+

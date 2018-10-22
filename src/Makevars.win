@@ -1,0 +1,20 @@
+ifeq ($(strip $(JAGS_ROOT)),)
+$(error JAGS_ROOT must be set.)
+endif
+
+PKG_CPPFLAGS=-I"$(JAGS_ROOT)/include" -I"$(JAGS_ROOT)/include/rng" -I"$(JAGS_ROOT)/include/distribution" -DMATHLIB_STANDALONE
+PKG_LIBS=-L"$(JAGS_ROOT)/${R_ARCH}/bin" $(LAPACK_LIBS) $(BLAS_LIBS) -ljrmath-0 -ljags-4
+
+OBJECTS.samplers=samplers/ExpandableArray.o samplers/Knots.o samplers/RJumpSpline.o  samplers/RJumpSplineFactory.o samplers/RealSlicerOV.o  samplers/SliceFactoryOV.o samplers/MNorm.o
+OBJECTS.distributions=distributions/DSpline.o distributions/DChisqrOV.o distributions/DTOV.o distributions/DNormOV.o distributions/DUnifOV.o distributions/RJScalarDist.o
+OBJECTS.root=RJump.o
+
+OBJECTS= $(OBJECTS.samplers) $(OBJECTS.distributions) $(OBJECTS.root)
+
+all: before $(SHLIB)
+
+clean:
+	rm -f $(OBJECTS)
+
+before: clean
+
